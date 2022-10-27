@@ -20,10 +20,7 @@ async function execute( options:InputOptions, context:BuilderContext ):Promise<B
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
         await generarHTML(rutaNombre);
-        await fs.writeFile(rutaNombre+".component.ts","import { Component } from \'@angular/core\';",(err) => {
-            if(err) throw err;
-            console.log("Se ha generado el archivo correctamente :D")
-        })
+        await generarTS(rutaNombre, nombre);
     } catch (error) {
         return {
             success: false,
@@ -42,6 +39,33 @@ async function generarHTML(rutaNombre: string): Promise<any> {
         if(err) throw err;
         console.log("Se ha generado el archivo correctamente :D")
     })
+}
+
+async function generarTS(rutaNombre: string, nombre : string): Promise<any> {
+    let textoTs = ""
+        +"import { Component, OnInit } from '@angular/core';\n"
+        +"\n"
+        +"@Component({\n"
+        +"selector: 'app-"+nombre+"',\n"
+        +"templateUrl: './"+nombre+".component.html',\n"
+        
+        +"})\n"
+        +"export class "+nombre.charAt(0).toUpperCase() + nombre.slice(1)+"Component implements OnInit {\n"
+        +"\n"
+        +"title : string = 'Carlos';\n"
+        +"bandera : boolean = true;\n"
+            +"constructor() { }\n"
+            +"\n"
+            +"ngOnInit(): void {\n"
+                +"}\n"
+                +"\n"
+                +"}\n"
+                +"\n";
+        await fs.writeFile(rutaNombre+".component.ts", textoTs
+        ,(err: any) => {
+            if(err) throw err;
+            console.log("Se ha generado el archivo correctamente :D")
+        })
 }
 
 export default createBuilder(execute);
