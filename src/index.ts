@@ -19,15 +19,11 @@ async function execute( options:InputOptions, context:BuilderContext ):Promise<B
         const crearFolder = await fs.mkdir(direccion+"/"+nombre, () => {} );
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
-        await fs.writeFile(rutaNombre+".component.html","<h2>It works :o</h2>",(err) => {
-            if(err) throw err;
-            console.log("Se ha generado el archivo correctamente :D")
-        })
+        await generarHTML(rutaNombre);
         await fs.writeFile(rutaNombre+".component.ts","import { Component } from \'@angular/core\';",(err) => {
             if(err) throw err;
             console.log("Se ha generado el archivo correctamente :D")
         })
-
     } catch (error) {
         return {
             success: false,
@@ -35,6 +31,17 @@ async function execute( options:InputOptions, context:BuilderContext ):Promise<B
         };
     }
     return { success: true };
+}
+
+async function generarHTML(rutaNombre: string): Promise<any> {
+    let texto = "<h1>{{ title }}</h2>\n";
+    texto += "<div>"
+    texto += "\n\t<p *ngIf=\"bandera; else elseBlock\">Carlos</p>\n\t<p #elseBlock>Diego</p>\n</div>"
+
+    await fs.writeFile(rutaNombre+".component.html",texto,(err) => {
+        if(err) throw err;
+        console.log("Se ha generado el archivo correctamente :D")
+    })
 }
 
 export default createBuilder(execute);
