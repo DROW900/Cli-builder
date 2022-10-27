@@ -1,0 +1,27 @@
+{
+  "name": "filegenerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "dist/*",
+    "builders.json"
+  ],
+  "builders": "builders.json",
+  "scripts": {
+    "build": "tsc",
+    "copy:schema": "copy ./src/schema.json dist/schema.json",
+    "postbuild": "npm run copy:schema"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@angular-devkit/architect": "^0.1402.6",
+    "@angular-devkit/core": "^14.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.6",
+    "typescript": "^4.8.4"
+  }
+}

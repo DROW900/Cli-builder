@@ -1,0 +1,9 @@
+{
+    "builders": {
+        "genera": {
+            "implementation": "./dist",
+            "schema": "./dist/schema.json",
+            "description": "Genera un componente simple de angula"
+        }
+    }
+}
