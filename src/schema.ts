@@ -1,5 +1,6 @@
 export interface Schema{
     "direccion":string,
     "nombre": string,
-    "modulo": string
+    "modulo": string,
+    "columnas": number 
 }
