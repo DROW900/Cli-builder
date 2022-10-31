@@ -69,21 +69,39 @@ export class TestComponent implements OnInit {
       header2: "",
       header3: "",
       header4: "",
+      editing: false,
+      edit: true,
+      read: true,
+      delete: true,
+      canDelete: true
     },
     {
       header1: "",
       header2: "",
       header3: "",
       header4: "",
+      editing: false,
+      edit: true,
+      read: true,
+      delete: true,
+      canDelete: true
+
     },
     {
       header1: "",
       header2: "",
       header3: "",
       header4: "",
+      editing: false,
+      edit: true,
+      read: true,
+      delete: true,
+      canDelete: true
     }
    
-  ]
+  ];
+
+  canEdit: boolean = true;
 
   constructor() { }
 
