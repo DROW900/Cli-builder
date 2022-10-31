@@ -20,6 +20,11 @@
             "type": "number",
             "description": "Número de columnas que serán generadas en la tabla"
         },
+        "numeroComponentes": {
+            "type": "number",
+            "description": "Número de componentes que se desean generar",
+            "default": 1
+        },
         "additionalProperties": false
     },
     "required": []

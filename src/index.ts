@@ -3,7 +3,7 @@ import {
     BuilderOutput,
     createBuilder
 } from '@angular-devkit/architect';
-
+import { generarComponente } from './helpers/inquirer';
 import { JsonObject } from '@angular-devkit/core';
 import { Schema } from './schema'
 import fs = require("fs");
@@ -13,7 +13,12 @@ type InputOptions = Schema & JsonObject
 async function execute(options: InputOptions, context: BuilderContext): Promise<BuilderOutput> {
     context = context;
     try {
-        let { direccion, nombre, modulo } = options
+        console.log("Holaaaaaaa");
+        let { direccion, nombre, modulo, numeroComponentes } = options
+        // Se pregunta por caracteristicas principales
+        let opt = await generarComponente(numeroComponentes);
+        console.log(opt);
+
         const rutaNombre = direccion + "/" + nombre + "/" + nombre;
         const rutaModulo = "" + modulo;
         console.log("Creando la carpeta...");
@@ -32,55 +37,6 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
     return { success: true };
 }
 
-/* //async function generarHTML(rutaNombre: string): Promise<any> {
-    let texto = "<main fxLayout=\"column\" fxFlexAlign=\"space-evenly center\">\n\n"
-    + "     <div class=\"mb-32\">\n"
-    + "         <h1 class=\"sectionTitle mb-8\">{{ title }}</h1>\n"
-    + "         <h2 class=\"formSubtitle\">{{ subtitle }}</h2>\n"
-    + "     </div>\n"
-    + "     <div fxLayout=\"row\" fxLayout.xs=\"column\" fxLayoutAlign=\"start center\" fxLayoutAlign.xs=\"center\" fxLayoutGap=\"8\" class=\"mb-16\">\n"
-    + "         <button fxFlex.xs=\"100\" class=\"primary\" mat-stroked-button>{{ textButton }}</button>\n"
-    + "     </div>\n\n"
-    
-    + "     <mat-card>\n"
-    + "         <mat-card-actions fxLayout=\"column\">\n"
-    + "             <div fxLayout=\"row\"  class=\"mb-24\">\n"
-    + "                 <div fxFlex=\"100\">\n"
-    + "                     <h3 *ngIf=\"titleCard != '' \" class=\"cardTitle\">{{titleCard}}</h3>\n"
-    + "                     <ng-container *ngIf=\"routeInfo.length > 0\">\n"
-    + "                         <span class=\"cardTitle\" *ngFor=\"let path of routeInfo; let last = last\">\n"
-    + "                             <ng-container *ngIf=\"path != undefined\">\n"
-    + "                                 {{ path }} <span *ngIf\"!last\"> / </span>\n"
-    + "                             </ng-container>\n"
-    + "                         </span>\n"
-    + "                     </ng-container>\n"
-    + "                 </div>\n"
-    + "                 <div *ngIf=\"showCloseButton\" fxLayoutAlign=\"end\">\n"
-    + "                     <button mat-icon-button>\n"
-    + "                         <mat-icon>close</mat-icon>\n"
-    + "                     </button>\n"
-    + "                 </div>\n"
-    + "             </div>\n\n"
-
-    + "             <div>\n"
-    + "                 <form class=\"example-form\" fxLayout=\"row wrap\" fxLayout.sm=\"row wrap\" fxLayout.xs=\"column\" fxLayoutGap=\"16px grid\" class=\"width100 p-0\">\n"
-    + "                     <mat-form-field appearance=\"outline\" fxFlex=\"20\" fxFlex.xs=\"100\" fxFlex.sm=\"auto\">\n"
-    + "                         <mat-label>Clave</mat-label>\n"
-    + "                         <input type=\"text\" aria-label=\"Number\" matInput>\n"
-    + "                     </mat-form-field>\n"
-    + "                     <mat-form-field class=\"mat-form-field\" appearance=\"outline\" fxFlex.xs=\"100\" fxFlex.sm=\"100\" fxFlexFill  fxFlex=\"56.9\">\n"
-    + "                         <mat-label>T&iacute;tulo en espa&ntilde;ol</mat-label>\n"
-    + "                         <input type=\"text\" aria-label=\"Number\" matInput>\n"
-    + "                     </mat-form-field>\n"
-    + "                     <mat-form-field appearance=\"outline\" fxFlex=\"20\" fxFlex.xs=\"auto\" fxFlex.sm=\"auto\" fxFlex.md=\"auto\"\n"
-    + "                         class=\"selectTest\">"
-    + ""
-
-    await fs.writeFile(rutaNombre + ".component.html", texto, (err) => {
-        if (err) throw err;
-        console.log("Se ha generado el archivo correctamente :D")
-    })
-} */
 
 async function copiarArchivos(rutaNombre: string) {
     await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre+".component.html", function (err){
