@@ -8,9 +8,13 @@
             "type": "string",
             "description": "Nombre del componente a generar"
         },
-        "direccion":{
+        "direccion": {
             "type": "string",
             "description": "Url donde se generará la carpeta"
+        },
+        "modulo": {
+            "type": "string",
+            "description": "Ruta del módulo donde se va a declarar el import del nuevo componente"
         },
         "additionalProperties": false
     },
