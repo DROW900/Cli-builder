@@ -13,14 +13,16 @@ type InputOptions = Schema & JsonObject
 async function execute(options: InputOptions, context: BuilderContext): Promise<BuilderOutput> {
     context = context;
     try {
-        let { direccion, nombre } = options
+        let { direccion, nombre, modulo } = options
         const rutaNombre = direccion + "/" + nombre + "/" + nombre;
+        const rutaModulo = ""+ modulo;
         console.log("Creando la carpeta...");
         const crearFolder = await fs.mkdir(direccion + "/" + nombre, () => { });
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
         await generarHTML(rutaNombre);
         await generarTS(rutaNombre, nombre);
+        await modificarModulo(rutaModulo, nombre);
     } catch (error) {
         return {
             success: false,
@@ -42,6 +44,8 @@ async function generarHTML(rutaNombre: string): Promise<any> {
 }
 
 async function generarTS(rutaNombre: string, nombre: string): Promise<any> {
+    console.log("nombre que entra", nombre);
+    console.log("ruta que entra", rutaNombre);
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
     let textoTs = ""
         + "import { Component, OnInit } from '@angular/core';\n"
@@ -84,10 +88,26 @@ function quitarGuion(nombre: string): string {
     return txt;
 }
 
-//async function modificarModulo(rutaNombre: string, nombre: string): Promise<any> {
-    //let str1 = "import { " + ComponetePruebaComponent
-    //+"} from './componete-prueba/componete-prueba.component'; "
-    //import { ComponetePruebaComponent } from './componete-prueba/componete-prueba.component';
-//}
+async function modificarModulo(rutaModulo: string, nombre: string): Promise<any> {
+    let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
+    let str1 = "import { " + nuevoNombreComponente + "Component } from './"+ nombre +"/"+ nombre +".component';\n";
+    let str2 = "    "+ nuevoNombreComponente + "Component,";
+    let index = 0;
+    fs.readFile(rutaModulo, 'utf-8', function(err, data){
+        if (err) throw err;
+        
+        let txt = data;
+        txt = str1 + txt;
+
+        index = txt.indexOf("declarations: [");
+        let txt1 = txt.replace("declarations: [","declarations: [\n"+str2);
+    
+        fs.writeFile(rutaModulo, txt1, 'utf-8', function (err) {
+          if (err) throw err;
+          console.log("Escritura de archivo completa");
+        });
+      });
+      console.log('index', index);
+}
 
 export default createBuilder(execute);
