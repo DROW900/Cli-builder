@@ -16,6 +16,10 @@
             "type": "string",
             "description": "Ruta del módulo donde se va a declarar el import del nuevo componente"
         },
+        "columnas": {
+            "type": "number",
+            "description": "Número de columnas que serán generadas en la tabla"
+        },
         "additionalProperties": false
     },
     "required": []
