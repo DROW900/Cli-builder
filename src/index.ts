@@ -83,14 +83,14 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
 } */
 
 async function copiarArchivos(rutaNombre: string) {
-    await fs.copyFile('./node_modules/generador/dist/test.component.html', rutaNombre+".component.html", function (err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre+".component.html", function (err){
         if(err){
             throw err
         }else{
             console.log("Se ha generado el HTML")
         }
     })
-    await fs.copyFile('./node_modules/generador/dist/test.component.css', rutaNombre+".component.css", function (err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.css', rutaNombre+".component.css", function (err){
         if(err){
             throw err
         }else{
