@@ -20,7 +20,7 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
         const crearFolder = await fs.mkdir(direccion + "/" + nombre, () => { });
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
-        await copiarHTML(rutaNombre);
+        await copiarArchivos(rutaNombre);
         await generarTS(rutaNombre, nombre);
         await modificarModulo(rutaModulo, nombre);
     } catch (error) {
@@ -82,10 +82,20 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
     })
 } */
 
-async function copiarHTML(rutaNombre: string) {
-    await fs.copyFile('/test.component.html', rutaNombre+".component.html", function (err){
-        if(err) throw err;
-        console.log("Se ha copiado el archivo :D")
+async function copiarArchivos(rutaNombre: string) {
+    await fs.copyFile('./node_modules/generador/dist/test.component.html', rutaNombre+".component.html", function (err){
+        if(err){
+            throw err
+        }else{
+            console.log("Se ha generado el HTML")
+        }
+    })
+    await fs.copyFile('./node_modules/generador/dist/test.component.css', rutaNombre+".component.css", function (err){
+        if(err){
+            throw err
+        }else{
+            console.log("Se ha generado el CSS")
+        }
     })
 }
 
