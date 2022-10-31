@@ -31,7 +31,7 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
 }
 
 async function generarHTML(rutaNombre: string): Promise<any> {
-    let texto = "<h1>{{ title }}</h2>\n";
+    let texto = "<h1>{{ title }}</h1>\n";
     texto += "<div>"
     texto += "\n\t<p *ngIf=\"bandera; else elseBlock\">Carlos</p>\n\t<p #elseBlock>Diego</p>\n</div>"
 
