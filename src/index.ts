@@ -13,7 +13,7 @@ type InputOptions = Schema & JsonObject
 async function execute(options: InputOptions, context: BuilderContext): Promise<BuilderOutput> {
     context = context;
     try {
-        let { direccion, nombre, modulo } = options
+        let { direccion, nombre, modulo, columnas } = options
         const rutaNombre = direccion + "/" + nombre + "/" + nombre;
         const rutaModulo = "" + modulo;
         console.log("Creando la carpeta...");
@@ -21,7 +21,7 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
         await copiarHTML(rutaNombre);
-        await generarTS(rutaNombre, nombre);
+        await generarTS(rutaNombre, columnas, nombre);
         await modificarModulo(rutaModulo, nombre);
     } catch (error) {
         return {
@@ -83,13 +83,13 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
 } */
 
 async function copiarHTML(rutaNombre: string) {
-    await fs.copyFile('/test.component.html', rutaNombre+".component.html", function (err){
-        if(err) throw err;
+    await fs.copyFile('/test.component.html', rutaNombre + ".component.html", function (err) {
+        if (err) throw err;
         console.log("Se ha copiado el archivo :D")
     })
 }
 
-async function generarTS(rutaNombre: string, nombre: string): Promise<any> {
+async function generarTS(rutaNombre: string, columnas: number, nombre: string): Promise<any> {
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
     let textoTs = ""
         + "import { Component, OnInit } from '@angular/core';\n"
@@ -97,19 +97,97 @@ async function generarTS(rutaNombre: string, nombre: string): Promise<any> {
         + "@Component({\n"
         + "selector: 'app-" + nombre + "',\n"
         + "templateUrl: './" + nombre + ".component.html',\n"
-
         + "})\n"
         + "export class " + nuevoNombreComponente + "Component implements OnInit {\n"
+
         + "\n"
-        + "title : string = 'Carlos';\n"
-        + "bandera : boolean = true;\n"
-        + "constructor() { }\n"
+        + "  title = \"Administración de Programas\";\n"
+        + "  subtitle = \"Series\";\n"
+        + "  textButton = \"Nueva Serie\";\n"
+        + "  titleCard = \"Buscar Producción\";\n"
+        + "  showCloseButton = false;\n"
+        + "  routeInfo = [];\n"
         + "\n"
-        + "ngOnInit(): void {\n"
+        + "  // Select\n"
+        + "\n"
+        + "  selectedValue = \"\";\n"
+        + "  tipoS: tipoSeries[] = [\n"
+        + "    {value: '', viewValue: 'Selecciona una opción'},\n"
+        + "    {value: 'Adquisición', viewValue: 'Adquisición'},\n"
+        + "    {value: 'Producción', viewValue: 'Producción'},\n"
+        + "    {value: 'Producción Digital', viewValue: 'Producción Digital'},\n"
+        + "    {value: 'Donación', viewValue: 'Donación'},\n"
+        + "    {value: 'Coproducción', viewValue: 'Coproducción'},\n"
+        + "    {value: 'Podcast', viewValue: 'Podcast'},\n"
+        + "    {value: 'Cine', viewValue: 'Cine'},\n"
+        + "  ];\n"
+        + "\n"
+        + "  // Seccion 2\n"
+        + "\n"
+        + "  titleCard2 = \"\";\n"
+        + "  routeInfo2 = [\"Registros modificados\", \"Ingresados recientemente\"];\n"
+        + "\n"
+        + "  // Table\n"
+        + "  headerName = \"Buscar\";\n"
+        + "  headers = [\n"
+        for(let contador = 0; contador < columnas; contador++){
+            + "    {\n"
+            + "      id:"+(contador+1)+",\n"
+            + "      name: \"Nombre "+(contador+1)+"\",\n"
+            + "      checked: true,\n"
+            + "    }, \n"
+        }
+        + "  ];\n"
+        + "\n"
+        + "  content = [\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "    },\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "\n"
+        + "    },\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "    }\n"
+        + "   \n"
+        + "  ];\n"
+        + "\n"
+        + "  canEdit: boolean = true;\n"
+        + "\n"
+        + "  constructor() { }\n"
+        + "\n"
+        + "  ngOnInit(): void {\n"
+        + "  }\n"
+        + "\n"
+        + "\n"
         + "}\n"
-        + "\n"
-        + "}\n"
-        + "\n";
+
+
     await fs.writeFile(rutaNombre + ".component.ts", textoTs
         , (err: any) => {
             if (err) throw err;
@@ -140,11 +218,11 @@ async function modificarModulo(rutaModulo: string, nombre: string): Promise<any>
 
     let index1 = txt.lastIndexOf("import {");
     let index2 = txt.lastIndexOf(";");
-    txt = txt.replace(txt.slice(index1,index2+1),txt.slice(index1,index2+1)+"\n"+str1);
+    txt = txt.replace(txt.slice(index1, index2 + 1), txt.slice(index1, index2 + 1) + "\n" + str1);
 
     index1 = txt.indexOf("declarations: [");
     index2 = txt.indexOf("],", index1);
-    txt = [txt.slice(0,index2-3)+",",str2,"  "+txt.slice(index2,txt.length)].join("\n");
+    txt = [txt.slice(0, index2 - 3) + ",", str2, "  " + txt.slice(index2, txt.length)].join("\n");
 
     fs.writeFile(rutaModulo, txt, 'utf-8', function (err) {
         if (err) throw err;
