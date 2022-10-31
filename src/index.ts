@@ -138,8 +138,6 @@ async function modificarModulo(rutaModulo: string, nombre: string): Promise<any>
     let str2 = "    " + nuevoNombreComponente + "Component";
     let txt = fs.readFileSync(rutaModulo, 'utf-8');
 
-    //txt = str1 + txt;
-
     let index1 = txt.lastIndexOf("import {");
     let index2 = txt.lastIndexOf(";");
     txt = txt.replace(txt.slice(index1,index2+1),txt.slice(index1,index2+1)+"\n"+str1);
@@ -147,7 +145,6 @@ async function modificarModulo(rutaModulo: string, nombre: string): Promise<any>
     index1 = txt.indexOf("declarations: [");
     index2 = txt.indexOf("],", index1);
     txt = [txt.slice(0,index2-3)+",",str2,"  "+txt.slice(index2,txt.length)].join("\n");
-    //txt = txt.replace("declarations: [", "declarations: [\n" + str2);
 
     fs.writeFile(rutaModulo, txt, 'utf-8', function (err) {
         if (err) throw err;
