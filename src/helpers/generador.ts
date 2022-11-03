@@ -37,5 +37,5 @@ export async function generarComponenteInterfaz( ruta: string, nombreModulo: str
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.html`, ruta + nombreComponente + '.component.html')
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.css`, ruta + nombreComponente + '.component.css')
     await fs.writeFile(ruta+ `${nombreComponente}.component.ts`, await generarTS(numeroColumnas, nombreComponente))
-    await modificarModulo(auxruta, nombreComponente, nombreModulo);
+    await modificarModulo(auxruta+"/", nombreComponente, nombreModulo);
 }

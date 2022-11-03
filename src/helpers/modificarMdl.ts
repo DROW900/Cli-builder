@@ -4,7 +4,7 @@ export async function modificarModulo(ruta: string, nombreComponente: string, no
     const relativePath = "./"+nombreComponente+"/"+nombreComponente+".component";
 
     let nuevoNombreComponente = nombreComponente.charAt(0).toUpperCase() + quitarGuion(nombreComponente.slice(1));
-    let str1 = "import { " + nuevoNombreComponente + "Component } from './" + relativePath + "/" + nombreComponente + ".component';";
+    let str1 = "import { " + nuevoNombreComponente + "Component } from '" + relativePath + "';";
     let str2 = "    " + nuevoNombreComponente + "Component";
     let txt = fs.readFileSync(ruta+nombreModulo+".module.ts", 'utf-8');
 
