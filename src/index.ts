@@ -226,20 +226,12 @@ function quitarGuion(nombre: string): string {
 }
 
 async function modificarModulo(rutaModulo: string, rutaComponente: string, nombre: string): Promise<any> {
-    console.log("componente", rutaComponente);
-    console.log("modulo", rutaModulo);
-
     const path = require('path');
     const path2 = rutaModulo;
     const path3 = rutaComponente;
-    // const path2 = "http://example.com/test1/test2/img/1.jpg";
-    // const path3 = "http://example.com/test1/img/1.jpg";
-    // const path2 = "./src/app/componente-primero1";
-    // const path3 = "./src/app/app.module.ts";
-
     let relativePath = path.relative(path.dirname(path2), path.dirname(path3));
-    console.log(relativePath); 
-    relativePath = relativePath.replace("\\","/");
+    var re = /\\/gi;
+    relativePath = relativePath.replace(re,"/");
 
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
     let str1 = "import { " + nuevoNombreComponente + "Component } from './" + relativePath + "/" + nombre + ".component';";
