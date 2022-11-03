@@ -1,5 +1,6 @@
 import fs = require('fs/promises');
-import { solicitarDatosComponente } from './inquirer';
+import { solicitarDatosComponente, solicitarNumeroColumnas } from './inquirer';
+import { generarTS } from './tsGenerator';
 
 export async function generarCarpeta( ruta: string, nombre: any ){
     ruta = ruta + "/" + nombre;
@@ -21,7 +22,10 @@ export async function generarModule( ruta: string, nombre: string ) {
 
 export async function generarComponenteInterfaz( ruta: string ) {
     const {nombreComponente, template} = await solicitarDatosComponente();
-
+    let numeroColumnas = 1;
+    if(template == 'test'){
+        numeroColumnas = await solicitarNumeroColumnas();
+    }
     //Se genera la carpeta del componente
     await generarCarpeta(ruta, nombreComponente);
     ruta = ruta + "/" + nombreComponente + "/";
@@ -29,5 +33,5 @@ export async function generarComponenteInterfaz( ruta: string ) {
     //Se realiza el copiado y generación de archivos
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.html`, ruta + nombreComponente + '.component.html')
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.css`, ruta + nombreComponente + '.component.css')
-    console.log("El componente se ha generado correctamente");
+    await fs.writeFile(ruta+ `${template}.component.ts`, await generarTS(numeroColumnas, nombreComponente))
 }

@@ -15,6 +15,20 @@ export const solicitarNumeroComponentes = async() =>{
     return Number( numeroComponentes );
 }
 
+export const solicitarNumeroColumnas = async () => {
+    const pregunta = [
+        {
+            type: Number,
+            name: 'numeroColumnas',
+            message: '¿Cuántas columnas deseas generar?',
+            default: 1
+        }
+    ]
+    
+    const { numeroColumnas } = await inquirer.prompt( pregunta );
+    return Number( numeroColumnas );
+}
+
 export const solicitarDatosComponente = async() => {
     const preguntas = [
         {
