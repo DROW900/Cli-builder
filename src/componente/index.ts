@@ -3,7 +3,6 @@ import {
     BuilderOutput,
     createBuilder
 } from '@angular-devkit/architect';
-import { generarComponente } from './helpers/inquirer';
 import { JsonObject } from '@angular-devkit/core';
 import { Schema } from './schema'
 import fs = require("fs");
@@ -13,12 +12,7 @@ type InputOptions = Schema & JsonObject
 async function execute(options: InputOptions, context: BuilderContext): Promise<BuilderOutput> {
     context = context;
     try {
-        console.log("Holaaaaaaa");
-        let { direccion, nombre, modulo, numeroComponentes } = options
-        // Se pregunta por caracteristicas principales
-        let opt = await generarComponente(numeroComponentes);
-        console.log(opt);
-
+        let { direccion, nombre, modulo } = options
         const rutaNombre = direccion + "/" + nombre + "/" + nombre;
         const rutaModulo = "" + modulo;
         console.log("Creando la carpeta...");

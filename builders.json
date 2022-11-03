@@ -1,9 +1,14 @@
 {
     "builders": {
-        "genera": {
-            "implementation": "./dist",
-            "schema": "./dist/schema.json",
-            "description": "Genera un componente simple de angula"
+        "generaComponente": {
+            "implementation": "./dist/componente",
+            "schema": "./dist/componente/schema.json",
+            "description": "Genera un componente personalizado de angular"
+        },
+        "generaModulo": {
+            "implementation": "./dist/modulo",
+            "schema": "./dist/modulo/schema.json",
+            "description": "Despliega una aplicación de consola para configurar y generar un modulo"
         }
     }
 }

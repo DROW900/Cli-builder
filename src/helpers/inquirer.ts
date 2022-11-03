@@ -1,21 +1,40 @@
 const inquirer = require('inquirer');
 
-export const generarComponente = async( numeroComponentes: number ) =>{
+export const solicitarNumeroComponentes = async() =>{
     const preguntas = [
         {
-            type: 'confirm',
-            name: 'esCorrecto',
-            message: `¿Desea generar ${numeroComponentes} componentes?`,
-            default: true
+            type: 'input',
+            name: 'numeroComponentes',
+            message: '¿Cuántos componentes desea generar?',
+            default: 0
+        },
+    ]
+
+    const { numeroComponentes } = await inquirer.prompt( preguntas );
+
+    return Number( numeroComponentes );
+}
+
+export const solicitarDatosComponente = async() => {
+    const preguntas = [
+        {
+            type: 'input',
+            name: 'nombreComponente',
+            message: 'Nombre del componente a generar: ',
         },
         {
-            type: 'confirm',
-            name: 'conRutas',
-            message: '¿Desea agregar routing?',
-            default: false
+            type: 'list',
+            name: 'template',
+            message: 'Tipo de componente a generar',
+            choices:[
+                'test',
+                'test',
+                'test',
+                'test'
+            ]
         }
     ]
 
-    const { respuestas } = await inquirer.prompt( preguntas );
-    return respuestas;
+    const objeto = await inquirer.prompt( preguntas );
+    return objeto;
 }

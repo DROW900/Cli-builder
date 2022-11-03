@@ -10,7 +10,7 @@
         },
         "direccion": {
             "type": "string",
-            "description": "Url donde se generará la carpeta"
+            "description": "Ruta donde se generará la carpeta"
         },
         "modulo": {
             "type": "string",
@@ -19,11 +19,6 @@
         "columnas": {
             "type": "number",
             "description": "Número de columnas que serán generadas en la tabla"
-        },
-        "numeroComponentes": {
-            "type": "number",
-            "description": "Número de componentes que se desean generar",
-            "default": 1
         },
         "additionalProperties": false
     },
