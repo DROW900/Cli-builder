@@ -230,7 +230,7 @@ async function modificarModulo(rutaModulo: string, rutaComponente: string, nombr
     const path2 = rutaModulo;
     const path3 = rutaComponente;
     let relativePath = path.relative(path.dirname(path2), path.dirname(path3));
-    var re = /\\/gi;
+    let re = /\\/gi;
     relativePath = relativePath.replace(re,"/");
 
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
