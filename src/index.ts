@@ -22,7 +22,7 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
         //Creando el archivo html
         await copiarArchivos(rutaNombre);
         await generarTS(rutaNombre, columnas, nombre);
-        await modificarModulo(rutaModulo, nombre);
+        await modificarModulo(rutaModulo, rutaNombre, nombre);
     } catch (error) {
         return {
             success: false,
@@ -83,17 +83,17 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
 } */
 
 async function copiarArchivos(rutaNombre: string) {
-    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre+".component.html", function (err){
-        if(err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre + ".component.html", function (err) {
+        if (err) {
             throw err
-        }else{
+        } else {
             console.log("Se ha generado el HTML")
         }
     })
-    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.css', rutaNombre+".component.css", function (err){
-        if(err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.css', rutaNombre + ".component.css", function (err) {
+        if (err) {
             throw err
-        }else{
+        } else {
             console.log("Se ha generado el CSS")
         }
     })
@@ -103,6 +103,11 @@ async function generarTS(rutaNombre: string, columnas: number, nombre: string): 
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
     let textoTs = ""
         + "import { Component, OnInit } from '@angular/core';\n"
+        + "\n"
+        + "interface tipoSeries {\n"
+        + "  value: string,\n"
+        + "  viewValue: string\n"
+        + "}\n"
         + "\n"
         + "@Component({\n"
         + "selector: 'app-" + nombre + "',\n"
@@ -139,15 +144,15 @@ async function generarTS(rutaNombre: string, columnas: number, nombre: string): 
         + "\n"
         + "  // Table\n"
         + "  headerName = \"Buscar\";\n"
-        + "  headers = [\n"
-        for(let contador = 0; contador < columnas; contador++){
-            + "    {\n"
-            + "      id:"+(contador+1)+",\n"
-            + "      name: \"Nombre "+(contador+1)+"\",\n"
+        + "  headers = [\n";
+    for (let contador = 0; contador < columnas; contador++) {
+        textoTs = textoTs + "    {\n"
+            + "      id:" + (contador + 1) + ",\n"
+            + "      name: \"Nombre " + (contador + 1) + "\",\n"
             + "      checked: true,\n"
             + "    }, \n"
-        }
-        + "  ];\n"
+    }
+    textoTs = textoTs + "  ];\n"
         + "\n"
         + "  content = [\n"
         + "    {\n"
@@ -220,9 +225,24 @@ function quitarGuion(nombre: string): string {
     return txt;
 }
 
-async function modificarModulo(rutaModulo: string, nombre: string): Promise<any> {
+async function modificarModulo(rutaModulo: string, rutaComponente: string, nombre: string): Promise<any> {
+    console.log("componente", rutaComponente);
+    console.log("modulo", rutaModulo);
+
+    const path = require('path');
+    const path2 = rutaModulo;
+    const path3 = rutaComponente;
+    // const path2 = "http://example.com/test1/test2/img/1.jpg";
+    // const path3 = "http://example.com/test1/img/1.jpg";
+    // const path2 = "./src/app/componente-primero1";
+    // const path3 = "./src/app/app.module.ts";
+
+    let relativePath = path.relative(path.dirname(path2), path.dirname(path3));
+    console.log(relativePath); 
+    relativePath = relativePath.replace("\\","/");
+
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
-    let str1 = "import { " + nuevoNombreComponente + "Component } from './" + nombre + "/" + nombre + ".component';";
+    let str1 = "import { " + nuevoNombreComponente + "Component } from './" + relativePath + "/" + nombre + ".component';";
     let str2 = "    " + nuevoNombreComponente + "Component";
     let txt = fs.readFileSync(rutaModulo, 'utf-8');
 
