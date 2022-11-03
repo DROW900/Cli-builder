@@ -1,6 +1,7 @@
 import fs = require('fs/promises');
 import { solicitarDatosComponente, solicitarNumeroColumnas } from './inquirer';
 import { generarTS } from './tsGenerator';
+import { modificarModulo } from './modificarMdl';
 
 export async function generarCarpeta( ruta: string, nombre: any ){
     ruta = ruta + "/" + nombre;
@@ -17,10 +18,11 @@ export async function generarRouting( ruta: string, nombre: string ) {
 export async function generarModule( ruta: string, nombre: string ) {
     ruta = ruta + "/" + nombre;
     console.log("Generando hoja de modulos")
-    await fs.writeFile(ruta+".module.ts","Hoja de modulo")
+    let moduleTxt = "import { NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';\n\n\n\n@NgModule({\n  declarations: [],\n  imports: [\n    CommonModule\n  ]\n})\nexport class PruebaModuloModule { }\n";
+    await fs.writeFile(ruta+".module.ts", moduleTxt)
 }
 
-export async function generarComponenteInterfaz( ruta: string ) {
+export async function generarComponenteInterfaz( ruta: string, nombreModulo: string ) {
     const {nombreComponente, template} = await solicitarDatosComponente();
     let numeroColumnas = 1;
     if(template == 'test'){
@@ -34,4 +36,5 @@ export async function generarComponenteInterfaz( ruta: string ) {
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.html`, ruta + nombreComponente + '.component.html')
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.css`, ruta + nombreComponente + '.component.css')
     await fs.writeFile(ruta+ `${template}.component.ts`, await generarTS(numeroColumnas, nombreComponente))
+    await modificarModulo(ruta, nombreComponente, nombreModulo);
 }
