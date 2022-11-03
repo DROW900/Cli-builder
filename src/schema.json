@@ -18,6 +18,8 @@
         },
         "columnas": {
             "type": "number",
+            "default": 1,
+            "alias": "c",
             "description": "Número de columnas que serán generadas en la tabla"
         },
         "additionalProperties": false
