@@ -23,7 +23,7 @@ export async function generarModule( ruta: string, nombre: string ) {
 export async function generarComponenteInterfaz( ruta: string ) {
     const {nombreComponente, template} = await solicitarDatosComponente();
     let numeroColumnas = 1;
-    if(template == 'test'){
+    if(template === 'test'){
         numeroColumnas = await solicitarNumeroColumnas();
     }
     //Se genera la carpeta del componente
@@ -33,5 +33,5 @@ export async function generarComponenteInterfaz( ruta: string ) {
     //Se realiza el copiado y generación de archivos
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.html`, ruta + nombreComponente + '.component.html')
     await fs.copyFile(`./node_modules/filtrosTabla/dist/templates/${template}.component.css`, ruta + nombreComponente + '.component.css')
-    await fs.writeFile(ruta+ `${template}.component.ts`, await generarTS(numeroColumnas, nombreComponente))
+    await fs.writeFile(ruta+ `${nombreComponente}.component.ts`, await generarTS(numeroColumnas, nombreComponente))
 }

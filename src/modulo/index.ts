@@ -20,19 +20,23 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
     context = context; 
     try {
         let { ruta, nombre } = options;
+        //Se genera la carpeta del modulo junto con sus archivos iniciales.
         await generarCarpeta( ruta, nombre );
-         //Se genera la carpeta del modulo junto con sus archivos iniciales.
         const rutaBase = ruta + "/" + nombre;
         await generarRouting( rutaBase, nombre );
         await generarModule( rutaBase, nombre )
 
         //Se solicita el numero de componentes que se generarán
-        const numeroComponentes = await solicitarNumeroComponentes();
+        const numeroComponentes = await solicitarNumeroComponentes(0);
         let i = 0;
         while(i < numeroComponentes){
             await generarComponenteInterfaz(rutaBase);
             i++;
         }
+
+        //Se solicita el número de catalogos
+        const numeroCatalogos = await solicitarNumeroComponentes(1);
+        console.log("El número de catalogos requeridos es: " + numeroCatalogos); 
 
     }catch (error) {
         console.log("Estado: Error");

@@ -1,0 +1,155 @@
+<main fxLayout="column" fxFlexAlign="space-evenly center">
+
+    <div class="mb-32">
+        <h1 class="sectionTitle mb-8">{{ title }}</h1>
+        <h2 class="formSubtitle">{{ subtitle }}</h2>
+    </div>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxLayoutAlign.xs="center" fxLayoutGap="8"
+        class="mb-16">
+        <button fxFlex.xs="100" class="primary" mat-stroked-button>{{ textButton }}</button>
+    </div>
+
+    <mat-card>
+
+        <mat-card-actions fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="mb-24">
+                <div fxFlex="100">
+                    <h3 *ngIf="titleCard != '' " class="cardTitle">{{titleCard}}</h3>
+                    <ng-container *ngIf="routeInfo.length > 0">
+                        <span class="cardTitle" *ngFor="let path of routeInfo; let last = last">
+                            <ng-container *ngIf="path != undefined">
+                                {{ path }} <span *ngIf="!last"> / </span>
+                            </ng-container>
+                        </span>
+                    </ng-container>
+                </div>
+                <div *ngIf="showCloseButton" fxLayoutAlign="end">
+                    <button mat-icon-button>
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <form class="example-form" fxLayout="row" fxLayout.sm="row wrap" fxLayout.xs="column"
+                    fxLayoutGap="16px grid" class="width100 p-0">
+                    <mat-form-field appearance="outline" fxFlex="20" fxFlex.sm="100" fxFlex.xs="100">
+                        <mat-label>Clave</mat-label>
+                        <input type="text" aria-label="Number" matInput>
+                    </mat-form-field>
+                    <mat-form-field class="mat-form-field" appearance="outline" fxFlex="auto" fxFlex.sm="100"
+                        fxFlex.xs="100">
+                        <mat-label>T&iacute;tulo en espa&ntilde;ol</mat-label>
+                        <input type="text" aria-label="Number" matInput>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="20" fxFlex.sm="100" fxFlex.xs="100" class="selectTest">
+                        <mat-label>Tipo de programa</mat-label>
+                        <mat-select [(ngModel)]="selectedValue" name="tipo">
+                            <mat-option *ngFor="let tipo of tipoS">{{tipo.viewValue}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+                <div fxLayout.xs="column" fxLayout="row" fxLayoutAlign="end center" fxLayoutAlign.xs="center"
+                    fxLayoutGap="16px" class="pr-16 botonTest">
+                    <button fxFlex.xs="100" class="primary" mat-stroked-button> Buscar </button>
+                    <button fxFlex.xs="100" class="secondary m0" mat-stroked-button> Limpiar </button>
+                </div>
+            </div>
+        </mat-card-actions>
+
+        <div class="mb-32">
+            <mat-divider></mat-divider>
+        </div>
+
+        <mat-card-actions fxLayout="column" LayoutAlign="space-between center" class="mb-24">
+
+            <div fxLayout="row" LayoutAlign="space-around  center" class="mb-32" div fxFlex="100">
+                <h3 *ngIf="titleCard != '' " class="cardTitle">{{titleCard2}}</h3>
+
+
+                <ng-container *ngIf="routeInfo2.length > 0">
+                    <span class="cardTitle" *ngFor="let path of routeInfo2; let last = last">
+                        <ng-container *ngIf="path != undefined">
+                            {{ path }} <span *ngIf="!last" class="mr-6"> / </span>
+                        </ng-container>
+                    </span>
+                </ng-container>
+            </div>
+
+            <div class="t-ble light-border mb-32">
+                <header fxLayout="row" fxLayoutAlign="space-between center">
+                    <mat-form-field fxFlex.xs="70" fxFlex.sm="40" fxFlex.md="30" fxFlex.lg="30" appearance="standard">
+                        <mat-label>{{ headerName }}</mat-label>
+                        <input type="text" matInput [placeholder]="headerName">
+                        <mat-icon matSuffix>search</mat-icon>
+                    </mat-form-field>
+
+                    <div id="icons-container" fxLayout="row" fxLayoutAlign="center center">
+                        <button matTooltip="Menú de columnas" mat-icon-button [matMenuTriggerFor]="menu" class="p0">
+                            <mat-icon class="table-icons">view_week</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <div class="p-8 text-align-center ft-15 w_500">Columnas visibles</div>
+                            <button *ngFor="let arrayItem of headers" mat-menu-item class="custom-menu-item">
+                                <mat-checkbox [checked]="arrayItem.checked"> {{ arrayItem.name }}</mat-checkbox>
+                            </button>
+                        </mat-menu>
+
+                        <mat-icon matTooltip="Nuevo registro" class="table-icons">add_circle</mat-icon>
+                    </div>
+
+                </header>
+
+                <div class="tableContainer">
+                    <table class="w_100 rounded-border">
+                        <thead class="mat-header-cell">
+                            <tr>
+                                <ng-container *ngFor="let item of headers; let i = index">
+                                    <th id="{{ item.id }}">
+                                        {{ item.name }}
+                                    </th>
+                                </ng-container>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="center">
+                            <tr *ngFor="let row of content; let idName = index">
+                                <td>{{ row.header1 }}</td>
+                                <td>{{ row.header2 }}</td>
+                                <td>{{ row.header3 }}</td>
+                                <td>{{ row.header4 }}</td>
+                                <td>
+                                    <button *ngIf="(row.editing === false || row.editing === undefined) && canEdit === true && row.edit === true"  mat-icon-button>
+                                        <mat-icon matTooltip="Editar registro" color="accent">edit</mat-icon>
+                                    </button>
+                                    <button *ngIf="row.read === true" mat-icon-button>
+                                        <mat-icon matTooltip="Consultar registro" color="primary">description</mat-icon>
+                                    </button>
+                                    <button *ngIf="(row.delete === true && row.editing === false) && row.canDelete === true" mat-icon-button>
+                                        <mat-icon matTooltip="Eliminar registro" color="primary">delete</mat-icon>
+                                    </button>
+                                    <button mat-icon-button *ngIf="row.editing === true" mat-icon-button>
+                                        <mat-icon matTooltip="Guardar registro" color="accent">save</mat-icon>
+                                    </button>
+                                    <button mat-icon-button *ngIf="row.editing === true">
+                                        <mat-icon color="primary">cancel</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-container>
+                    <mat-paginator class="" aria-label="Select page of users" hidePageSize="false"
+                        aria-label="Select page" itemsPerPageLabel="Items por pagina">
+                    </mat-paginator>
+                </ng-container>
+
+            </div>
+        </mat-card-actions>
+    </mat-card>
+
+
+
+</main>

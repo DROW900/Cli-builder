@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 
-export const solicitarNumeroComponentes = async() =>{
+export const solicitarNumeroComponentes = async(i: number) =>{
     const preguntas = [
         {
             type: 'input',
@@ -8,11 +8,18 @@ export const solicitarNumeroComponentes = async() =>{
             message: '¿Cuántos componentes desea generar?',
             default: 0
         },
+        {
+            type: 'input',
+            name: 'numeroCatalogos',
+            message: '¿Cuántos catalogos desea generar?'
+        }
     ]
-
-    const { numeroComponentes } = await inquirer.prompt( preguntas );
-
-    return Number( numeroComponentes );
+    if(i === 0){
+        const { numeroComponentes } = await inquirer.prompt( preguntas[i] );
+        return Number( numeroComponentes );
+    }
+    const { numeroCatalogos } = await inquirer.prompt( preguntas[i] );
+    return Number( numeroCatalogos );
 }
 
 export const solicitarNumeroColumnas = async () => {
