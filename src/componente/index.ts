@@ -12,7 +12,7 @@ type InputOptions = Schema & JsonObject
 async function execute(options: InputOptions, context: BuilderContext): Promise<BuilderOutput> {
     context = context;
     try {
-        let { direccion, nombre, modulo } = options
+        let { direccion, nombre, modulo, columnas } = options
         const rutaNombre = direccion + "/" + nombre + "/" + nombre;
         const rutaModulo = "" + modulo;
         console.log("Creando la carpeta...");
@@ -20,8 +20,8 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
         console.log("Se ha creado el directorio con exito", crearFolder);
         //Creando el archivo html
         await copiarArchivos(rutaNombre);
-        await generarTS(rutaNombre, nombre);
-        await modificarModulo(rutaModulo, nombre);
+        await generarTS(rutaNombre, columnas, nombre);
+        await modificarModulo(rutaModulo, rutaNombre, nombre);
     } catch (error) {
         return {
             success: false,
@@ -33,43 +33,126 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
 
 
 async function copiarArchivos(rutaNombre: string) {
-    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre+".component.html", function (err){
-        if(err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.html', rutaNombre + ".component.html", function (err) {
+        if (err) {
             throw err
-        }else{
+        } else {
             console.log("Se ha generado el HTML")
         }
     })
-    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.css', rutaNombre+".component.css", function (err){
-        if(err){
+    await fs.copyFile('./node_modules/filtrosTabla/dist/test.component.css', rutaNombre + ".component.css", function (err) {
+        if (err) {
             throw err
-        }else{
+        } else {
             console.log("Se ha generado el CSS")
         }
     })
 }
 
-async function generarTS(rutaNombre: string, nombre: string): Promise<any> {
+async function generarTS(rutaNombre: string, columnas: number, nombre: string): Promise<any> {
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
     let textoTs = ""
         + "import { Component, OnInit } from '@angular/core';\n"
         + "\n"
+        + "interface tipoSeries {\n"
+        + "  value: string,\n"
+        + "  viewValue: string\n"
+        + "}\n"
+        + "\n"
         + "@Component({\n"
         + "selector: 'app-" + nombre + "',\n"
         + "templateUrl: './" + nombre + ".component.html',\n"
-
         + "})\n"
         + "export class " + nuevoNombreComponente + "Component implements OnInit {\n"
+
         + "\n"
-        + "title : string = 'Carlos';\n"
-        + "bandera : boolean = true;\n"
-        + "constructor() { }\n"
+        + "  title = \"Administración de Programas\";\n"
+        + "  subtitle = \"Series\";\n"
+        + "  textButton = \"Nueva Serie\";\n"
+        + "  titleCard = \"Buscar Producción\";\n"
+        + "  showCloseButton = false;\n"
+        + "  routeInfo = [];\n"
         + "\n"
-        + "ngOnInit(): void {\n"
+        + "  // Select\n"
+        + "\n"
+        + "  selectedValue = \"\";\n"
+        + "  tipoS: tipoSeries[] = [\n"
+        + "    {value: '', viewValue: 'Selecciona una opción'},\n"
+        + "    {value: 'Adquisición', viewValue: 'Adquisición'},\n"
+        + "    {value: 'Producción', viewValue: 'Producción'},\n"
+        + "    {value: 'Producción Digital', viewValue: 'Producción Digital'},\n"
+        + "    {value: 'Donación', viewValue: 'Donación'},\n"
+        + "    {value: 'Coproducción', viewValue: 'Coproducción'},\n"
+        + "    {value: 'Podcast', viewValue: 'Podcast'},\n"
+        + "    {value: 'Cine', viewValue: 'Cine'},\n"
+        + "  ];\n"
+        + "\n"
+        + "  // Seccion 2\n"
+        + "\n"
+        + "  titleCard2 = \"\";\n"
+        + "  routeInfo2 = [\"Registros modificados\", \"Ingresados recientemente\"];\n"
+        + "\n"
+        + "  // Table\n"
+        + "  headerName = \"Buscar\";\n"
+        + "  headers = [\n";
+    for (let contador = 0; contador < columnas; contador++) {
+        textoTs = textoTs + "    {\n"
+            + "      id:" + (contador + 1) + ",\n"
+            + "      name: \"Nombre " + (contador + 1) + "\",\n"
+            + "      checked: true,\n"
+            + "    }, \n"
+    }
+    textoTs = textoTs + "  ];\n"
+        + "\n"
+        + "  content = [\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "    },\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "\n"
+        + "    },\n"
+        + "    {\n"
+        + "      header1: \"\",\n"
+        + "      header2: \"\",\n"
+        + "      header3: \"\",\n"
+        + "      header4: \"\",\n"
+        + "      editing: false,\n"
+        + "      edit: true,\n"
+        + "      read: true,\n"
+        + "      delete: true,\n"
+        + "      canDelete: true\n"
+        + "    }\n"
+        + "   \n"
+        + "  ];\n"
+        + "\n"
+        + "  canEdit: boolean = true;\n"
+        + "\n"
+        + "  constructor() { }\n"
+        + "\n"
+        + "  ngOnInit(): void {\n"
+        + "  }\n"
+        + "\n"
+        + "\n"
         + "}\n"
-        + "\n"
-        + "}\n"
-        + "\n";
+
+
     await fs.writeFile(rutaNombre + ".component.ts", textoTs
         , (err: any) => {
             if (err) throw err;
@@ -92,19 +175,34 @@ function quitarGuion(nombre: string): string {
     return txt;
 }
 
-async function modificarModulo(rutaModulo: string, nombre: string): Promise<any> {
+async function modificarModulo(rutaModulo: string, rutaComponente: string, nombre: string): Promise<any> {
+    console.log("componente", rutaComponente);
+    console.log("modulo", rutaModulo);
+
+    const path = require('path');
+    const path2 = rutaModulo;
+    const path3 = rutaComponente;
+    // const path2 = "http://example.com/test1/test2/img/1.jpg";
+    // const path3 = "http://example.com/test1/img/1.jpg";
+    // const path2 = "./src/app/componente-primero1";
+    // const path3 = "./src/app/app.module.ts";
+
+    let relativePath = path.relative(path.dirname(path2), path.dirname(path3));
+    console.log(relativePath); 
+    relativePath = relativePath.replace("\\","/");
+
     let nuevoNombreComponente = nombre.charAt(0).toUpperCase() + quitarGuion(nombre.slice(1));
-    let str1 = "import { " + nuevoNombreComponente + "Component } from './" + nombre + "/" + nombre + ".component';";
+    let str1 = "import { " + nuevoNombreComponente + "Component } from './" + relativePath + "/" + nombre + ".component';";
     let str2 = "    " + nuevoNombreComponente + "Component";
     let txt = fs.readFileSync(rutaModulo, 'utf-8');
 
     let index1 = txt.lastIndexOf("import {");
     let index2 = txt.lastIndexOf(";");
-    txt = txt.replace(txt.slice(index1,index2+1),txt.slice(index1,index2+1)+"\n"+str1);
+    txt = txt.replace(txt.slice(index1, index2 + 1), txt.slice(index1, index2 + 1) + "\n" + str1);
 
     index1 = txt.indexOf("declarations: [");
     index2 = txt.indexOf("],", index1);
-    txt = [txt.slice(0,index2-3)+",",str2,"  "+txt.slice(index2,txt.length)].join("\n");
+    txt = [txt.slice(0, index2 - 3) + ",", str2, "  " + txt.slice(index2, txt.length)].join("\n");
 
     fs.writeFile(rutaModulo, txt, 'utf-8', function (err) {
         if (err) throw err;
