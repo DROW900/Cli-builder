@@ -30,7 +30,7 @@ async function execute(options: InputOptions, context: BuilderContext): Promise<
         const numeroComponentes = await solicitarNumeroComponentes(0);
         let i = 0;
         while(i < numeroComponentes){
-            await generarComponenteInterfaz(rutaBase);
+            await generarComponenteInterfaz(rutaBase, nombre);
             i++;
         }
 
